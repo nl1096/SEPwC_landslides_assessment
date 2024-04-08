@@ -42,7 +42,16 @@ Rscript terrain_analysis.R --topography data/AW3D30.tif --geology data/geology_r
 
 ## Hints and tips
 
+There are built in functions in R packages (`terra`) to calculate slope and distance from a shapefile. Use them
 
+The `randomForest` library can create the classifier required. It needs a column (e.g. `ls~.`) and
+a dataframe to work. You can create test and train samples form a dataframe using the `sample` package from
+the `caret` library. 
+
+You need positive and negative data from the rasters. This can be done by extracting data from 
+all of your rasters under the landslides shapefile using `terra` library. You'll 
+also need negative samples (hint: same length!). You send this into The RF classifier 
+and then use predict to make a probability map.
 
 ## The rules
 
