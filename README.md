@@ -42,6 +42,15 @@ Rscript terrain_analysis.R --topography data/AW3D30.tif --geology data/geology_r
 
 ## Hints and tips
 
+For randomForest you'll need a dataframe with each row having values of the 
+rasters under the landslides and points *outside* the landslides. You'll
+need to figure out how to randomly sample outside the landslide plygon. 
+
+The `terra` library contains a lot of functionality, including slope
+calculations, and proximity distances function. 
+
+Both `terra` and `sf` can handle shapefiles, but you need to be able to switch 
+an object between them. 
 
 
 ## The rules
