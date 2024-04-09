@@ -48,10 +48,16 @@ The `randomForest` library can create the classifier required. It needs a column
 a dataframe to work. You can create test and train samples form a dataframe using the `sample` package from
 the `caret` library. 
 
-You need positive and negative data from the rasters. This can be done by extracting data from 
-all of your rasters under the landslides shapefile using `terra` library. You'll 
-also need negative samples (hint: same length!). You send this into The RF classifier 
+You need positive (i.e. values of all rasters where landslides occur) and negative data (values where they don't occur) 
+from the rasters. This can be done by extracting data from 
+all of your rasters under the landslides shapefile using `terra` library. 
+You send these data into The RF classifier 
 and then use predict to make a probability map.
+
+It might be helpful to print the accuracy score
+or other metrics from the classifier if the verbose flag is on, perhaps.
+[This website]<https://www.r-bloggers.com/2021/04/random-forest-in-r/> might
+help with this.
 
 ## The rules
 
