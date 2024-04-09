@@ -44,7 +44,7 @@ Rscript terrain_analysis.R --topography data/AW3D30.tif --geology data/geology_r
 
 For randomForest you'll need a dataframe with each row having values of the 
 rasters under the landslides and points *outside* the landslides. You'll
-need to figure out how to randomly sample outside the landslide plygon. 
+need to figure out how to randomly sample outside the landslide polygon. 
 
 The `terra` library contains a lot of functionality, including slope
 calculations, and proximity distances function. 
@@ -52,6 +52,21 @@ calculations, and proximity distances function.
 Both `terra` and `sf` can handle shapefiles, but you need to be able to switch 
 an object between them. 
 
+The `randomForest` library can create the classifier required. It needs a column (e.g. `ls~.`) and
+a dataframe to work. You can create test and train samples form a dataframe using the `sample` package from
+the `caret` library. 
+
+You need positive (i.e. values of all rasters where landslides occur) and negative data
+(values where they don't occur) 
+from the rasters. This can be done by extracting data from 
+all of your rasters under the landslides shapefile using `terra` library. 
+You send these data into The RF classifier 
+and then use predict to make a probability map.
+
+It might be helpful to print the accuracy score
+or other metrics from the classifier if the verbose flag is on, perhaps.
+[This website]<https://www.r-bloggers.com/2021/04/random-forest-in-r/> might
+help with this.
 
 ## The rules
 
