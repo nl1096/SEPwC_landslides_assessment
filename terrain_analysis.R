@@ -16,3 +16,10 @@ utils::globalVariables(c("x", "y", "prob", "Variable", "MeanDecreaseGini"))
 extract_values_from_raster <- function(raster_stack, shapefile) {
   terra::extract(raster_stack, shapefile)
 }
+
+# Create a training dataframe with raster values and a landslide label
+create_dataframe <- function(raster_stack, shapefile, landslide) {
+  values <- terra::extract(raster_stack, shapefile)[, -1]
+  values$ls <- as.factor(landslide)
+  values
+}
