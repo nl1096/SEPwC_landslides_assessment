@@ -23,3 +23,8 @@ create_dataframe <- function(raster_stack, shapefile, landslide) {
   values$ls <- as.factor(landslide)
   values
 }
+
+# Train a random forest classifier using the labeled data
+make_classifier <- function(dataframe) {
+  randomForest::randomForest(ls ~ ., data = dataframe)
+}
