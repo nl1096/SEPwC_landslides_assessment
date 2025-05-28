@@ -78,7 +78,7 @@ source("../terrain_analysis.R")
 
   if (requireNamespace("lintr")) {
     library(lintr)
-  
+
     context("linting script")
     test_that("Coding style", {
       output<-lintr::lint("../terrain_analysis.R")
@@ -91,5 +91,3 @@ source("../terrain_analysis.R")
       expect_equal(length(output),0)
     })
   }
-
-
