@@ -114,3 +114,54 @@ main <- function(args) {
   }
 
 }
+
+# Main program, called via Rscript
+if (sys.nframe() == 0) {   # or if (!interactive()) {
+  parser <- ArgumentParser(
+    prog = "Landslide Risk",
+    description = "Calculate landslide probability risk using Random Forests"
+  )
+  parser$add_argument(
+    "--topography",
+    required = TRUE,
+    help = "Topographic raster file"
+  )
+  parser$add_argument(
+    "--geology",
+    required = TRUE,
+    help = "Geology raster file"
+  )
+  parser$add_argument(
+    "--landcover",
+    required = TRUE,
+    help = "Landcover raster file"
+  )
+  parser$add_argument(
+    "--faults",
+    required = TRUE,
+    help = "Fault location shapefile"
+  )
+  parser$add_argument(
+    "landslides",
+    help = "Landslide location shapefile"
+  )
+  parser$add_argument(
+    "output",
+    help = "Output raster file"
+  )
+  parser$add_argument(
+    "-v",
+    "--verbose",
+    action = "store_true",
+    default = FALSE,
+    help = "Print progress"
+  )
+  parser$add_argument(
+    "--plot",
+    action = "store_true",
+    help = "Show plots"
+  )
+
+  args <- parser$parse_args()
+  main(args)
+}
