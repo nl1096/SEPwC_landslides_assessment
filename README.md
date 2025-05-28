@@ -1,84 +1,76 @@
-# SEPwC Landslide Risk Coursework (R)
+**Landslide Susceptibility Mapping with Random Forests**
 
-## Introduction
+This project uses geospatial data and machine learning (Random Forest) to generate a probability map of landslide susceptibility. Raster and vector layers are combined to extract terrain, geology, landcover, and proximity features. The model is trained on known landslide locations and used to predict risk across the study area.
 
-Your task is to write code to read in muliple raster and shapefiles, perform some analysis, 
-and then generate a risk (probability) map of landslides. You should output this as a 
-raster (with values from 0 to 1).
+---
 
-## The tests
+**Features**
 
-The test suite uses a number of test data sets. The tests will check these data
-functions work. 
+- Extracts raster values at known landslide locations
+- Randomly samples background (non-landslide) points
+- Trains a Random Forest classifier
+- Generates a raster map showing landslide probability (0 to 1)
+- **Optional:** Plots the resulting map and shows feature importance
 
-You can run the tests by running `Rscript test_script.R` in the `test` directory, 
-or from R directly:
+---
 
-```R
-library(testthat)
-test_file("test_script.R")
-```
+**Dependencies**
 
-from the test directory. Try it now, before you make any changes!
+The script uses the following R packages:
 
-## The data
+- `terra` — for spatial raster/vector processing
+- `argparse` — to handle command-line arguments
+- `randomForest` — for classification
+- `ggplot2` — for pretty plots (optional)
+- `dplyr` — used to help format data for plotting (optional)
 
+Install them (if needed) using:
 
-There are a number of rasters and shapefiles for this task:
+install.packages(c("terra", "argparse", "randomForest", "ggplot2", "dplyr"))
 
- - `AW3D30.tif` - topography data
- - `Confirmed_faults.shp` - fault location data
- - `Geology.tif` - rock types across the region
- - `Lancover.tif` - landcover codes
- - `landslides.shp` - Landslide occurances
+---
 
-From those you will also need to generate slope raster and a "distance from fault" raster.
+**Usage**
 
-Your code should run like:
+Run the script using `Rscript` from the command line:
 
-```bash
-Rscript terrain_analysis.R --topography data/AW3D30.tif --geology data/geology_raster.tif --landcover data/Landcover.tif --faults data/Confirmed_faults.shp data/landslides.shp probability.tif
-```
+Rscript terrain_analysis.R --topography data/AW3D30.tif --geology data/geology.tif --landcover data/Landcover.tif --faults data/Confirmed_faults.shp data/landslides.shp probability.tif
 
-## Hints and tips
+**Optional Features**
 
-For randomForest you'll need a dataframe with each row having values of the 
-rasters under the landslides and points *outside* the landslides. You'll
-need to figure out how to randomly sample outside the landslide polygon. 
+Use `--plot` to display:
 
-The `terra` library contains a lot of functionality, including slope
-calculations, and proximity distances function. 
+- A probability map using `ggplot2`
+- A bar chart showing feature importance
 
-Both `terra` and `sf` can handle shapefiles, but you need to be able to switch 
-an object between them. 
+Use `--verbose` to print model details and training progress
 
-The `randomForest` library can create the classifier required. It needs a column (e.g. `ls~.`) and
-a dataframe to work. You can create test and train samples form a dataframe using the `sample` package from
-the `caret` library. 
+Run the script interactively via R:
 
-You need positive (i.e. values of all rasters where landslides occur) and negative data
-(values where they don't occur) 
-from the rasters. This can be done by extracting data from 
-all of your rasters under the landslides shapefile using `terra` library. 
-You send these data into The RF classifier 
-and then use predict to make a probability map.
+source("terrain_analysis.R")
+args <- list(
+  topography = "data/AW3D30.tif",
+  geology = "data/geology.tif",
+  landcover = "data/Landcover.tif",
+  faults = "data/Confirmed_faults.shp",
+  landslides = "data/landslides.shp",
+  output = "probability.tif",
+  verbose = TRUE,
+  plot = FALSE
+)
+main(args)
 
-It might be helpful to print the accuracy score
-or other metrics from the classifier if the verbose flag is on, perhaps.
-[This website]<https://www.r-bloggers.com/2021/04/random-forest-in-r/> might
-help with this.
+---
 
-## The rules
+**Output**
 
-You cannot alter any of the assert comments in `test/test_terrain.R`
+The script produces:
 
-If you alter any function names in the main code, you *can* alter the name
-in the test file to match; however the rest of the test must remain unchanged. 
-This will be checked.
+- A **raster map** (`probability.tif`) where each cell value is the predicted landslide probability.
+- Optional: probability map and feature importance plots (`plots.pdf`) (only if `--plot` is set).
 
-If you wish to add more tests, please do, but place them in a separate file
-in the `test` directory. Remember to name the file `test_something.R`.
+---
 
-You can also add extra functionality, but the command-line interface must pass
-the tests set.
+**Author**
 
+Natalia Lukomska — Undergraduate project for SEPwC module (UoY)
