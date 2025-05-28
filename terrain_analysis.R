@@ -28,3 +28,8 @@ create_dataframe <- function(raster_stack, shapefile, landslide) {
 make_classifier <- function(dataframe) {
   randomForest::randomForest(ls ~ ., data = dataframe)
 }
+
+# Predict landslide probability for every cell in the raster stack
+make_probability_raster <- function(raster_stack, classifier) {
+  terra::predict(raster_stack, classifier, type = "prob", index = 2)
+}
