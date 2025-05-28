@@ -77,4 +77,40 @@ main <- function(args) {
     print("Training completed")
     print(model)
   }
+
+  # Optional plots (ggplot package)
+  if (!is.null(args$plot)) {
+    raster_df <- as.data.frame(prob_map, xy = TRUE, na.rm = TRUE)
+    colnames(raster_df)[3] <- "prob"
+
+    print(
+      ggplot(raster_df, aes(x = x, y = y, fill = prob)) +
+        geom_raster() +
+        scale_fill_viridis_c(
+                             name = "Landslide Probability",
+                             option = "plasma") +
+        coord_equal() +
+        theme_minimal() +
+        labs(title = "Predicted Landslide Probability Map")
+    )
+
+    # Feature importance plot
+    importance_df <- as.data.frame(randomForest::importance(model))
+    importance_df$Variable <- rownames(importance_df)
+
+    print(
+      ggplot(
+             importance_df,
+             aes(x = reorder(Variable, MeanDecreaseGini),
+                 y = MeanDecreaseGini)) +
+        geom_col(fill = "steelblue") +
+        coord_flip() +
+        labs(
+             title = "Feature Importance",
+             y = "Mean Decrease in Gini",
+             x = "Variable") +
+        theme_minimal()
+    )
+  }
+
 }
